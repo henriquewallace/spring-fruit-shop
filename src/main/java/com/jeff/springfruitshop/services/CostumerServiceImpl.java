@@ -2,6 +2,7 @@ package com.jeff.springfruitshop.services;
 
 import com.jeff.springfruitshop.api.v1.mapper.CostumerMapper;
 import com.jeff.springfruitshop.api.v1.model.CostumerDTO;
+import com.jeff.springfruitshop.domain.Costumer;
 import com.jeff.springfruitshop.repositories.CostumerRepository;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +31,13 @@ public class CostumerServiceImpl implements CostumerService {
     @Override
     public CostumerDTO getCostumerById(Long id) {
         return costumerMapper.costumerToCostumerDTO(costumerRepository.getCostumerById(id));
+    }
+
+    @Override
+    public CostumerDTO createNewCostumer(CostumerDTO costumerDTO) {
+        Costumer costumer = costumerMapper.costumerDtoToCostumer(costumerDTO);
+        Costumer savedCostumer = costumerRepository.save(costumer);
+
+        return costumerMapper.costumerToCostumerDTO(savedCostumer);
     }
 }

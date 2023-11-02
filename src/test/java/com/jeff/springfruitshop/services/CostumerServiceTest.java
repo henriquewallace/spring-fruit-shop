@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -58,5 +59,23 @@ class CostumerServiceTest {
         assertEquals(ID, costumerDTO.getId());
         assertEquals(FIRSTNAME, costumerDTO.getFirstName());
         assertEquals(LASTNAME, costumerDTO.getLastName());
+    }
+
+    @Test
+    void createNewCostumer() {
+        CostumerDTO costumerDTO = new CostumerDTO();
+        costumerDTO.setFirstName(FIRSTNAME);
+        costumerDTO.setLastName(LASTNAME);
+
+        Costumer savedCostumer = new Costumer();
+        savedCostumer.setId(1L);
+        savedCostumer.setFirstName(costumerDTO.getFirstName());
+        savedCostumer.setLastName(costumerDTO.getLastName());
+
+        when(costumerRepository.save(any(Costumer.class))).thenReturn(savedCostumer);
+
+        CostumerDTO savedDTO = costumerService.createNewCostumer(costumerDTO);
+
+        assertEquals(costumerDTO.getFirstName(), savedDTO.getFirstName());
     }
 }

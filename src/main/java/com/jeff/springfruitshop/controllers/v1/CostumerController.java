@@ -6,14 +6,12 @@ import com.jeff.springfruitshop.services.CostumerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/api/v1/costumers/")
+@RequestMapping("/api/v1/costumers")
 public class CostumerController {
 
     private final CostumerService costumerService;
@@ -29,10 +27,17 @@ public class CostumerController {
         );
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CostumerDTO> getCostumerById(@PathVariable Long id) {
         return new ResponseEntity<CostumerDTO>(
                 costumerService.getCostumerById(Long.valueOf(id)), HttpStatus.OK
         );
+    }
+
+    @PostMapping
+    public ResponseEntity<CostumerDTO> createNewCostumer(@RequestBody CostumerDTO costumerDTO) {
+        return new ResponseEntity<CostumerDTO>(
+                costumerService.createNewCostumer(costumerDTO),
+                HttpStatus.CREATED);
     }
 }

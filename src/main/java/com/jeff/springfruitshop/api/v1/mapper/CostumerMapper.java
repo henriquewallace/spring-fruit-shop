@@ -5,10 +5,12 @@ import com.jeff.springfruitshop.domain.Costumer;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CostumerMapper {
 
     CostumerMapper INSTANCE = Mappers.getMapper(CostumerMapper.class);
 
     CostumerDTO costumerToCostumerDTO(Costumer costumer);
+
+    Costumer costumerDtoToCostumer(CostumerDTO costumerDTO);
 }

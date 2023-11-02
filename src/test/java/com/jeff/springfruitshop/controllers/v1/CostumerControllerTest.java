@@ -11,9 +11,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static com.jeff.springfruitshop.controllers.v1.AbstractRestControllerTest.asJsonString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.Matchers.hasSize;
@@ -78,6 +80,25 @@ class CostumerControllerTest {
         mockMvc.perform(get("/api/v1/costumers/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", equalTo("Elena")));
+    }
+
+    @Test
+    void createNewCostumer() throws Exception {
+        CostumerDTO costumerDTO = new CostumerDTO();
+        costumerDTO.setFirstName("Elena");
+        costumerDTO.setLastName("Parker");
+
+        CostumerDTO returnDto = new CostumerDTO();
+        returnDto.setFirstName(costumerDTO.getFirstName());
+        returnDto.setLastName(costumerDTO.getLastName());
+
+        when(costumerService.createNewCostumer(costumerDTO)).thenReturn(returnDto);
+
+        mockMvc.perform(post("/api/v1/costumers/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(costumerDTO)))
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstName", equalTo("Elena")));
     }
 }
