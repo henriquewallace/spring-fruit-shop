@@ -35,9 +35,35 @@ public class CostumerServiceImpl implements CostumerService {
 
     @Override
     public CostumerDTO createNewCostumer(CostumerDTO costumerDTO) {
+        return saveAndReturnDTO(costumerMapper.costumerDtoToCostumer(costumerDTO));
+    }
+
+    @Override
+    public CostumerDTO saveCostumerByDTO(Long id, CostumerDTO costumerDTO) {
         Costumer costumer = costumerMapper.costumerDtoToCostumer(costumerDTO);
+        costumer.setId(id);
+
+        return saveAndReturnDTO(costumer);
+    }
+
+    @Override
+    public CostumerDTO patchCostumer(Long id, CostumerDTO costumerDTO) {
+        return costumerRepository.findById(id).map(costumer -> {
+            if (costumer.getFirstName() != null) {
+                costumer.setFirstName(costumerDTO.getFirstName());
+            }
+
+            if (costumer.getLastName() != null) {
+                costumer.setLastName(costumerDTO.getLastName());
+            }
+
+            return costumerMapper.costumerToCostumerDTO(costumerRepository.save(costumer));
+        }).orElseThrow(RuntimeException::new);
+    }
+
+    private CostumerDTO saveAndReturnDTO(Costumer costumer) {
         Costumer savedCostumer = costumerRepository.save(costumer);
 
-        return costumerMapper.costumerToCostumerDTO(savedCostumer);
+        return costumerMapper.costumerToCostumerDTO(costumer);
     }
 }

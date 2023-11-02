@@ -78,4 +78,38 @@ class CostumerServiceTest {
 
         assertEquals(costumerDTO.getFirstName(), savedDTO.getFirstName());
     }
+
+    @Test
+    void saveCostumerByDTO() {
+        CostumerDTO costumerDTO = new CostumerDTO();
+        costumerDTO.setFirstName("John");
+
+        Costumer savedCostumer = new Costumer();
+        savedCostumer.setId(1L);
+        savedCostumer.setFirstName(costumerDTO.getFirstName());
+        savedCostumer.setLastName(costumerDTO.getLastName());
+
+        when(costumerRepository.save(any(Costumer.class))).thenReturn(savedCostumer);
+
+        CostumerDTO savedDTO = costumerService.saveCostumerByDTO(1L, costumerDTO);
+
+        assertEquals(costumerDTO.getFirstName(), savedDTO.getFirstName());
+    }
+
+//    @Test
+//    void patchCostumer() {
+//        CostumerDTO costumerDTO = new CostumerDTO();
+//        costumerDTO.setFirstName("John");
+//
+//        Costumer savedCostumer = new Costumer();
+//        savedCostumer.setId(1L);
+//        savedCostumer.setFirstName(costumerDTO.getFirstName());
+//        savedCostumer.setLastName(costumerDTO.getLastName());
+//
+//        when(costumerRepository.save(any(Costumer.class))).thenReturn(savedCostumer);
+//
+//        CostumerDTO savedDTO = costumerService.patchCostumer(1L, costumerDTO);
+//
+//        assertEquals(costumerDTO.getFirstName(), savedDTO.getFirstName());
+//    }
 }

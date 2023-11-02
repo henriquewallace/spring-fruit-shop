@@ -13,9 +13,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static com.jeff.springfruitshop.controllers.v1.AbstractRestControllerTest.asJsonString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.Matchers.hasSize;
@@ -100,5 +100,45 @@ class CostumerControllerTest {
                 .content(asJsonString(costumerDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstName", equalTo("Elena")));
+    }
+
+    @Test
+    void updateCostumer() throws Exception {
+        CostumerDTO costumerDTO = new CostumerDTO();
+        costumerDTO.setFirstName("Elena");
+        costumerDTO.setLastName("Parker");
+
+        CostumerDTO returnDto = new CostumerDTO();
+        returnDto.setFirstName(costumerDTO.getFirstName());
+        returnDto.setLastName(costumerDTO.getLastName());
+
+        when(costumerService.saveCostumerByDTO(anyLong(), any(CostumerDTO.class))).thenReturn(returnDto);
+
+        mockMvc.perform(put("/api/v1/costumers/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(costumerDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", equalTo("Elena")))
+                .andExpect(jsonPath("$.lastName", equalTo("Parker")));
+    }
+
+    @Test
+    void patchCostumer() throws Exception {
+        CostumerDTO costumerDTO = new CostumerDTO();
+        costumerDTO.setFirstName("Elena");
+        costumerDTO.setLastName("Parker");
+
+        CostumerDTO returnDto = new CostumerDTO();
+        returnDto.setFirstName(costumerDTO.getFirstName());
+        returnDto.setLastName(costumerDTO.getLastName());
+
+        when(costumerService.patchCostumer(anyLong(), any(CostumerDTO.class))).thenReturn(returnDto);
+
+        mockMvc.perform(patch("/api/v1/costumers/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(costumerDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", equalTo("Elena")))
+                .andExpect(jsonPath("$.lastName", equalTo("Parker")));
     }
 }

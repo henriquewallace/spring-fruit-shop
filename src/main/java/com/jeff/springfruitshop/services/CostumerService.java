@@ -12,4 +12,8 @@ public interface CostumerService {
     CostumerDTO getCostumerById(Long id);
 
     CostumerDTO createNewCostumer(CostumerDTO costumerDTO);
+
+    CostumerDTO saveCostumerByDTO(Long id, CostumerDTO costumerDTO);
+
+    CostumerDTO patchCostumer(Long id, CostumerDTO costumerDTO);
 }
